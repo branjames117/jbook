@@ -23,6 +23,24 @@ const initialState: CellsState = {
 const reducer = produce(
   (state: CellsState = initialState, action: Action): void => {
     switch (action.type) {
+      case ActionType.SAVE_CELLS_ERROR:
+        state.error = action.payload;
+        return;
+      case ActionType.FETCH_CELLS:
+        state.loading = true;
+        state.error = null;
+        return;
+      case ActionType.FETCH_CELLS_COMPLETE:
+        state.order = action.payload.map((cell) => cell.id);
+        state.data = action.payload.reduce((acc, cell) => {
+          acc[cell.id] = cell;
+          return acc;
+        }, {} as CellsState['data']);
+        return;
+      case ActionType.FETCH_CELLS_ERROR:
+        state.loading = false;
+        state.error = action.payload;
+        return;
       case ActionType.UPDATE_CELL:
         const { id, content } = action.payload;
         state.data[id].content = content;

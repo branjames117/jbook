@@ -1,8 +1,9 @@
 import './cell-list.css';
-import { Fragment } from 'react';
+import { useEffect, Fragment } from 'react';
 import { useTypedSelector } from '../hooks/use-typed-selector';
 import CellListItem from './cell-list-item';
 import AddCell from './add-cell';
+import { useActions } from '../hooks/use-actions';
 
 const CellList: React.FC = () => {
   // get the cells from our redux store then map them according to order
@@ -11,6 +12,12 @@ const CellList: React.FC = () => {
       return data[id];
     });
   });
+
+  const { fetchCells } = useActions();
+
+  useEffect(() => {
+    fetchCells();
+  }, []);
 
   const renderedCells = cells.map((cell) => (
     <Fragment key={cell.id}>
